@@ -11,7 +11,6 @@ from app.database.mongodb import get_database
 from app.models.document import document_to_public, new_document_record
 from app.schemas.document_schemas import DocumentListResponse, DocumentPublic
 from app.services.document_pipeline import process_document
-from app.services.vector_store import delete_positions
 from app.utils.files import resolve_within, safe_filename
 from app.utils.logger import get_logger
 
@@ -95,12 +94,9 @@ async def delete_document(document_id: str, current_user: dict = Depends(get_cur
     user_id = str(current_user["_id"])
     doc = await _get_owned_document(db, document_id, user_id)
 
-    chunk_cursor = db.chunks.find({"document_id": document_id, "user_id": user_id})
-    faiss_positions = [c["faiss_index"] async for c in chunk_cursor]
-
-    if faiss_positions:
-        delete_positions(faiss_positions)
-
+    # Chunks store their own embedding vector inline (Atlas Vector Search),
+    # so deleting the chunk documents is sufficient - no separate vector
+    # index cleanup step needed.
     await db.chunks.delete_many({"document_id": document_id, "user_id": user_id})
     await db.documents.delete_one({"_id": doc["_id"], "user_id": user_id})
 

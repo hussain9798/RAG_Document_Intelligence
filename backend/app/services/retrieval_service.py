@@ -2,19 +2,20 @@
 Retrieval service.
 
 Given a question and an authenticated user_id, this is the only place that
-turns a FAISS search into MongoDB-backed, user-scoped source chunks. It is
-the enforcement point for user isolation: chunks belonging to other users
-are filtered out even if (hypothetically) a stray vector search hit them.
+turns a MongoDB Atlas Vector Search query into user-scoped source chunks.
+It is the enforcement point for user isolation: the vector search itself
+is pre-filtered to the requesting user's own chunks.
 """
 from bson import ObjectId
 
 from app.config import get_settings
 from app.database.mongodb import get_database
 from app.services.embedding_service import embed_query
-from app.services.vector_store import search as faiss_search
 from app.utils.logger import get_logger
 
 logger = get_logger("rag.retrieval_service")
+
+VECTOR_INDEX_NAME = "chunk_vector_index"
 
 
 async def retrieve_relevant_chunks(
@@ -29,24 +30,38 @@ async def retrieve_relevant_chunks(
     settings = get_settings()
     db = get_database()
 
-    query_vector = embed_query(question)
+    query_vector = embed_query(question).tolist()
 
-    # Over-fetch from FAISS since we still need to apply the user/document
-    # filter and the similarity threshold in MongoDB.
-    raw_hits = faiss_search(query_vector, top_k=settings.top_k * 4)
-    if not raw_hits:
-        return []
-
-    faiss_positions = [pos for pos, _ in raw_hits]
-    score_by_position = {pos: score for pos, score in raw_hits}
-
-    mongo_query: dict = {"user_id": user_id, "faiss_index": {"$in": faiss_positions}}
+    vector_filter: dict = {"user_id": {"$eq": user_id}}
     if document_ids:
-        mongo_query["document_id"] = {"$in": document_ids}
+        vector_filter = {"$and": [vector_filter, {"document_id": {"$in": document_ids}}]}
 
-    cursor = db.chunks.find(mongo_query)
-    chunk_docs = [c async for c in cursor]
+    fetch_limit = settings.top_k * 4
+    num_candidates = max(fetch_limit * 10, 150)
 
+    pipeline = [
+        {
+            "$vectorSearch": {
+                "index": VECTOR_INDEX_NAME,
+                "path": "embedding",
+                "queryVector": query_vector,
+                "numCandidates": num_candidates,
+                "limit": fetch_limit,
+                "filter": vector_filter,
+            }
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "document_id": 1,
+                "page_number": 1,
+                "text": 1,
+                "atlas_score": {"$meta": "vectorSearchScore"},
+            }
+        },
+    ]
+
+    chunk_docs = [c async for c in db.chunks.aggregate(pipeline)]
     if not chunk_docs:
         return []
 
@@ -57,12 +72,12 @@ async def retrieve_relevant_chunks(
 
     results = []
     for chunk in chunk_docs:
-        # Defensive re-check: only include chunks whose parent document also
-        # belongs to this user (guards against any stale/foreign metadata).
         if chunk["document_id"] not in doc_name_by_id:
             continue
-        score = score_by_position.get(chunk["faiss_index"])
-        if score is None or score < settings.similarity_threshold:
+        # Atlas cosine vectorSearchScore = (1 + cosine_similarity) / 2, in [0, 1].
+        # Convert back to raw cosine so similarity_threshold keeps its old meaning.
+        cosine_score = 2 * chunk["atlas_score"] - 1
+        if cosine_score < settings.similarity_threshold:
             continue
         results.append(
             {
@@ -70,12 +85,14 @@ async def retrieve_relevant_chunks(
                 "document_id": chunk["document_id"],
                 "document_name": doc_name_by_id[chunk["document_id"]],
                 "page_number": chunk["page_number"],
-                "score": round(score, 4),
+                "score": round(cosine_score, 4),
                 "text": chunk["text"],
             }
         )
 
     results.sort(key=lambda r: r["score"], reverse=True)
     top = results[: settings.top_k]
-    logger.info("Retrieval for user %s returned %d chunks (threshold=%s)", user_id, len(top), settings.similarity_threshold)
+    logger.info(
+        "Retrieval for user %s returned %d chunks (threshold=%s)", user_id, len(top), settings.similarity_threshold
+    )
     return top

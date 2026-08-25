@@ -24,12 +24,11 @@ class Settings(BaseSettings):
     llm_api_key: str = ""
     llm_model: str = "claude-sonnet-4-6"
 
-    # Embeddings
-    embedding_model: str = "all-MiniLM-L6-v2"
+    # Embeddings (Google Gemini)
+    gemini_api_key: str = ""
 
     # Storage
     upload_dir: str = "storage/uploads"
-    vector_db_dir: str = "storage/vector_indexes"
 
     # Chunking
     chunk_size_words: int = 600

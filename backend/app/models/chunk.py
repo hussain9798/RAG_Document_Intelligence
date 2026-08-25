@@ -1,16 +1,15 @@
 """
 Mongo 'chunks' collection shape.
 
-Each chunk record is the single link in the chain:
-    User -> Document -> Page -> Chunk -> FAISS Vector
-`faiss_index` is the integer position of this chunk's vector inside the
-FAISS index, and must stay in sync with services/vector_store.py.
+Each chunk record stores its own embedding vector directly (used by
+MongoDB Atlas Vector Search on the "embedding" field). This removes the
+need for a separate local FAISS index / faiss_index position mapping.
 """
 from datetime import datetime, timezone
 
 
 def new_chunk_document(
-    user_id, document_id, chunk_index: int, page_number: int, text: str, faiss_index: int
+    user_id, document_id, chunk_index: int, page_number: int, text: str, embedding: list[float]
 ) -> dict:
     return {
         "user_id": user_id,
@@ -18,6 +17,6 @@ def new_chunk_document(
         "chunk_index": chunk_index,
         "page_number": page_number,
         "text": text,
-        "faiss_index": faiss_index,
+        "embedding": embedding,
         "created_at": datetime.now(timezone.utc),
     }

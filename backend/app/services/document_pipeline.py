@@ -1,9 +1,10 @@
 """
 Document processing pipeline orchestrator.
 
-Runs: extract -> clean -> chunk -> embed -> store-in-FAISS -> store-metadata-in-Mongo
--> update document status. Runs as a FastAPI background task after upload so
-the HTTP response returns immediately with status="uploaded"/"processing".
+Runs: extract -> clean -> chunk -> embed -> store-in-Mongo (with embedding
+vectors inline) -> update document status. Runs as a FastAPI background
+task after upload so the HTTP response returns immediately with
+status="uploaded"/"processing".
 """
 from bson import ObjectId
 
@@ -14,7 +15,6 @@ from app.services.chunking_service import chunk_document
 from app.services.cleaning_service import clean_text
 from app.services.embedding_service import embed_documents
 from app.services.pdf_service import PDFProcessingError, extract_pages
-from app.services.vector_store import add_embeddings, save_index
 from app.utils.logger import get_logger
 
 logger = get_logger("rag.document_pipeline")
@@ -48,10 +48,6 @@ async def process_document(document_id: str, user_id: str, file_path: str) -> No
         vectors = embed_documents(texts)
         logger.info("Embedding generation completed for document %s (%d chunks)", document_id, len(chunks))
 
-        faiss_positions = add_embeddings(vectors)
-        save_index()
-        logger.info("FAISS indexing completed for document %s", document_id)
-
         chunk_docs = [
             new_chunk_document(
                 user_id=user_id,
@@ -59,12 +55,13 @@ async def process_document(document_id: str, user_id: str, file_path: str) -> No
                 chunk_index=c["chunk_index"],
                 page_number=c["page_number"],
                 text=c["text"],
-                faiss_index=pos,
+                embedding=vec.tolist(),
             )
-            for c, pos in zip(chunks, faiss_positions)
+            for c, vec in zip(chunks, vectors)
         ]
         if chunk_docs:
             await db.chunks.insert_many(chunk_docs)
+        logger.info("Chunks stored in MongoDB for document %s", document_id)
 
         await set_status(STATUS_PROCESSED, page_count=total_pages, error_message=None)
         logger.info("Document processing completed: %s (%d pages, %d chunks)", document_id, total_pages, len(chunks))

@@ -1,7 +1,7 @@
 """
 Embedding service.
 
-Uses Google's Gemini embedding API (models/text-embedding-004) instead of a
+Uses Google's Gemini embedding API (models/gemini-embedding-001) instead of a
 locally-loaded model. This keeps the app's memory footprint small enough to
 run comfortably on Render's free tier - no torch / sentence-transformers
 loaded into memory.
@@ -18,7 +18,7 @@ logger = get_logger("rag.embedding_service")
 
 _configured = False
 
-EMBEDDING_MODEL = "models/text-embedding-004"
+EMBEDDING_MODEL = "models/gemini-embedding-001"
 EMBEDDING_DIM = 768
 
 
@@ -42,11 +42,21 @@ def _embed_batch(texts: list[str], task_type: str) -> list[list[float]]:
     for i in range(0, len(texts), batch_size):
         batch = texts[i : i + batch_size]
         try:
-            result = genai.embed_content(model=EMBEDDING_MODEL, content=batch, task_type=task_type)
+            result = genai.embed_content(
+                model=EMBEDDING_MODEL,
+                content=batch,
+                task_type=task_type,
+                output_dimensionality=EMBEDDING_DIM,
+            )
         except Exception:
             logger.warning("Gemini embedding call failed, retrying once...")
             time.sleep(2)
-            result = genai.embed_content(model=EMBEDDING_MODEL, content=batch, task_type=task_type)
+            result = genai.embed_content(
+                model=EMBEDDING_MODEL,
+                content=batch,
+                task_type=task_type,
+                output_dimensionality=EMBEDDING_DIM,
+            )
 
         embeddings = result["embedding"]
         if batch and isinstance(embeddings[0], float):

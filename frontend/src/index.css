@@ -7,9 +7,32 @@ html, body, #root {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900;
+  @apply bg-slate-50 text-slate-900 transition-colors duration-300;
 }
 
+/* dark mode defaults */
+.dark body {
+  @apply bg-slate-900 text-slate-100;
+}
+
+/* small helper animations for subtle UI polish */
+.fade-in {
+  animation: fade-in 250ms ease-out both;
+}
+.slide-up {
+  animation: slide-up 300ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+/* mobile bottom nav styling */
+.mobile-nav {
+  @apply fixed bottom-3 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-800/90 backdrop-blur rounded-full px-3 py-2 shadow-lg flex gap-2 items-center z-50;
+}
+
+.mobile-nav a {
+  @apply flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-slate-600 dark:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-700/60 transition-colors;
+}
+
+/* scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

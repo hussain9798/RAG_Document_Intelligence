@@ -70,5 +70,5 @@ async def process_document(document_id: str, user_id: str, file_path: str) -> No
         logger.warning("Document processing failed (PDF error) for %s: %s", document_id, exc)
         await set_status(STATUS_FAILED, error_message=str(exc))
     except Exception as exc:
-        logger.error("Document processing failed (unexpected) for %s: %s", document_id, exc)
+        logger.exception("Document processing failed (unexpected) for %s", document_id)
         await set_status(STATUS_FAILED, error_message="An unexpected error occurred while processing this document.")

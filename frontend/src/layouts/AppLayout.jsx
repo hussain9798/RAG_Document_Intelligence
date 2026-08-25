@@ -202,7 +202,7 @@ export default function AppLayout({ children }) {
 
       {/* Content area */}
       <main className="flex-1 overflow-y-auto pt-14 md:pt-0 bg-slate-50 dark:bg-slate-900 transition-colors">
-        <div className="p-4 md:p-6 min-h-[calc(100vh-56px)] animate-fade-in">{children}</div>
+        <div className="p-4 md:p-6 pb-24 md:pb-0 min-h-[calc(100vh-56px)] animate-fade-in">{children}</div>
       </main>
 
       {/* Mobile bottom nav */}

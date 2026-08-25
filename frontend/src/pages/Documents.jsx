@@ -150,7 +150,7 @@ export default function Documents() {
           />
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-2xl">
           {loading ? (
             <p className="p-6 text-sm text-slate-500">Loading documents...</p>
           ) : error ? (
@@ -161,21 +161,21 @@ export default function Documents() {
               <p className="text-sm">No documents found.</p>
             </div>
           ) : (
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto"><table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr className="text-left text-slate-500 border-b border-slate-200">
-                  <th className="px-5 py-3 font-medium">Name</th>
-                  <th className="px-5 py-3 font-medium">Pages</th>
-                  <th className="px-5 py-3 font-medium">Size</th>
-                  <th className="px-5 py-3 font-medium">Status</th>
-                  <th className="px-5 py-3 font-medium">Uploaded</th>
-                  <th className="px-5 py-3 font-medium text-right">Actions</th>
+                  <th className="px-3 sm:px-5 py-3 font-medium">Name</th>
+                  <th className="px-3 sm:px-5 py-3 font-medium">Pages</th>
+                  <th className="px-3 sm:px-5 py-3 font-medium">Size</th>
+                  <th className="px-3 sm:px-5 py-3 font-medium">Status</th>
+                  <th className="px-3 sm:px-5 py-3 font-medium">Uploaded</th>
+                  <th className="px-3 sm:px-5 py-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((doc) => (
                   <tr key={doc.id} className="border-b border-slate-100 last:border-0">
-                    <td className="px-5 py-3">
+                    <td className="px-3 sm:px-5 py-3">
                       <div className="flex items-center gap-2">
                         <FileText size={16} className="text-slate-400 shrink-0" />
                         <span className="truncate max-w-xs">{doc.filename}</span>
@@ -184,26 +184,28 @@ export default function Documents() {
                         <p className="text-xs text-red-600 mt-1">{doc.error_message}</p>
                       )}
                     </td>
-                    <td className="px-5 py-3">{doc.page_count ?? "—"}</td>
-                    <td className="px-5 py-3">{formatSize(doc.file_size)}</td>
-                    <td className="px-5 py-3">
+                    <td className="px-3 sm:px-5 py-3">{doc.page_count ?? "—"}</td>
+                    <td className="px-3 sm:px-5 py-3">{formatSize(doc.file_size)}</td>
+                    <td className="px-3 sm:px-5 py-3">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${STATUS_STYLES[doc.status]}`}>
                         {doc.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-slate-500">{new Date(doc.created_at).toLocaleDateString()}</td>
-                    <td className="px-5 py-3 text-right">
+                    <td className="px-3 sm:px-5 py-3 text-slate-500">{new Date(doc.created_at).toLocaleDateString()}</td>
+                    <td className="px-3 sm:px-5 py-3 text-right">
                       <div className="flex items-center justify-end gap-1">
                         <Link
                           to={`/documents/${doc.id}`}
-                          className="text-slate-400 hover:text-brand-600 text-xs font-medium px-2 py-1.5 rounded-lg hover:bg-slate-50"
+                          title="View"
+                          className="text-slate-600 dark:text-slate-200 hover:text-brand-600 text-xs font-medium px-2 py-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50"
                         >
                           View
                         </Link>
                         <button
                           onClick={() => handleDelete(doc.id)}
-                          className="text-slate-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50"
+                          className="text-slate-600 dark:text-slate-200 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-600/10"
                           title="Delete"
+                          aria-label="Delete document"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -212,7 +214,7 @@ export default function Documents() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
           )}
         </div>
       </div>

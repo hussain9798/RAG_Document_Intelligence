@@ -53,7 +53,7 @@ async def _ensure_indexes(db: AsyncIOMotorDatabase) -> None:
 
     await db.chunks.create_index("document_id")
     await db.chunks.create_index("user_id")
-    await db.chunks.create_index("faiss_index", unique=True)
+    
 
     await db.conversations.create_index("user_id")
     await db.conversations.create_index("created_at")

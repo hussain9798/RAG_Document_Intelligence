@@ -16,11 +16,8 @@ logger = get_logger("rag.main")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    settings = get_settings()
-    await connect_to_mongo()
     logger.info("Application startup complete")
     yield
-    await close_mongo_connection()
     logger.info("Application shutdown complete")
 
 

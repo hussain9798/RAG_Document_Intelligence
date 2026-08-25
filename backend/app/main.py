@@ -16,8 +16,10 @@ logger = get_logger("rag.main")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    await connect_to_mongo()
     logger.info("Application startup complete")
     yield
+    await close_mongo_connection()
     logger.info("Application shutdown complete")
 
 
@@ -29,6 +31,8 @@ app = FastAPI(
 )
 
 settings = get_settings()
+logger.info("CORS origins configured: %s", settings.cors_origin_list)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,

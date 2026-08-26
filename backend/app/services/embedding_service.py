@@ -26,6 +26,14 @@ def _ensure_configured() -> None:
     global _configured
     if not _configured:
         settings = get_settings()
+        if not settings.gemini_api_key:
+            raise RuntimeError(
+                "GEMINI_API_KEY is not set (or is empty) in the environment. "
+                "Set it in Render's Environment tab."
+            )
+        import os
+
+        os.environ["GOOGLE_API_KEY"] = settings.gemini_api_key
         genai.configure(api_key=settings.gemini_api_key)
         _configured = True
 

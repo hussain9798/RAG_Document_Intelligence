@@ -16,22 +16,24 @@ import { chatApi, documentsApi } from "../services/api.js";
 function SourceCard({ source }) {
   const [expanded, setExpanded] = useState(false);
   return (
-    <div className="border border-slate-200 rounded-lg p-3 bg-slate-50">
+    <div className="border border-indigo-100 dark:border-slate-700 rounded-xl p-3 bg-gradient-to-r from-slate-50 to-indigo-50/60 dark:from-slate-800 dark:to-slate-900 shadow-sm">
       <button
         onClick={() => setExpanded((e) => !e)}
         className="w-full flex items-center justify-between text-left"
       >
         <div className="flex items-center gap-2 min-w-0">
-          <FileText size={14} className="text-slate-400 shrink-0" />
+          <div className="rounded-md bg-white dark:bg-slate-700 p-1.5 shadow-sm">
+            <FileText size={12} className="text-brand-500 shrink-0" />
+          </div>
           <span className="text-sm font-medium truncate">{source.document_name}</span>
           <span className="text-xs text-slate-500 shrink-0">Page {source.page_number}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-xs text-brand-600 font-medium">{(source.score * 100).toFixed(0)}%</span>
-          {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-brand-100 text-brand-700 font-medium">{(source.score * 100).toFixed(0)}%</span>
+          {expanded ? <ChevronUp size={14} className="text-slate-500" /> : <ChevronDown size={14} className="text-slate-500" />}
         </div>
       </button>
-      {expanded && <p className="text-xs text-slate-600 mt-2 leading-relaxed">{source.text}</p>}
+      {expanded && <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">{source.text}</p>}
     </div>
   );
 }
@@ -44,8 +46,8 @@ function MessageBubble({ message }) {
         <div
           className={`px-4 py-3 rounded-2xl text-sm whitespace-pre-wrap shadow-sm transition-all duration-200 ${
             isUser
-              ? "bg-brand-500 text-white rounded-br-md shadow-brand-500/20"
-              : "bg-white border border-slate-200 rounded-bl-md text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
+            ? "bg-gradient-to-r from-brand-500 via-indigo-500 to-violet-500 text-white rounded-br-md shadow-lg shadow-brand-500/20"
+            : "bg-white/90 border border-slate-200/80 rounded-bl-md text-slate-700 dark:bg-slate-800/90 dark:border-slate-700 dark:text-slate-100"
           }`}
         >
           {message.content}
@@ -185,7 +187,7 @@ export default function Chat() {
     <AppLayout>
       <div className="flex h-[calc(100vh-56px)] md:h-full md:min-h-[calc(100vh-64px)]">
         {/* Desktop sidebar */}
-        <div className="hidden md:flex w-80 border-r border-slate-200 bg-gradient-to-b from-white to-slate-50 flex-col shrink-0 dark:from-slate-800 dark:to-slate-900 dark:border-slate-700">
+        <div className="hidden md:flex w-80 border-r border-white/40 bg-gradient-to-b from-white/70 via-slate-50/80 to-indigo-50/60 backdrop-blur-xl flex-col shrink-0 dark:from-slate-800/80 dark:via-slate-900/80 dark:to-slate-900 dark:border-slate-700/50 shadow-[inset_-1px_0_0_rgba(255,255,255,0.5)]">
           {sidebarContent}
         </div>
 
@@ -200,8 +202,8 @@ export default function Chat() {
         )}
 
         {/* Main chat area */}
-        <div className="flex-1 flex flex-col min-h-0 bg-slate-50 dark:bg-slate-900">
-          <div className="h-16 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-3 md:px-6 shrink-0 bg-white dark:bg-slate-800 shadow-sm">
+        <div className="flex-1 flex flex-col min-h-0 bg-[radial-gradient(circle_at_top_left,_rgba(79,109,245,0.12),transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.12),transparent_28%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.14),transparent_18%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.16),transparent_28%)]">
+          <div className="h-16 border-b border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between px-3 md:px-6 shrink-0 bg-white/70 dark:bg-slate-800/75 backdrop-blur-xl shadow-sm">
             <div className="flex items-center gap-2 md:hidden">
               <button
                 onClick={() => setMobileSidebarOpen(true)}
@@ -279,7 +281,7 @@ export default function Chat() {
             </div>
           )}
 
-          <div className="p-3 md:p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 pb-24 md:pb-4 shadow-[0_-8px_24px_rgba(15,23,42,0.04)]">
+          <div className="p-3 md:p-4 border-t border-slate-200/80 dark:border-slate-700/80 bg-white/75 dark:bg-slate-800/80 backdrop-blur-xl pb-24 md:pb-4 shadow-[0_-8px_24px_rgba(79,70,229,0.08)]">
             <div className="flex items-end gap-2 max-w-3xl mx-auto">
               <textarea
                 value={input}
@@ -287,12 +289,12 @@ export default function Chat() {
                 onKeyDown={handleKeyDown}
                 rows={1}
                 placeholder="Ask a question about your documents..."
-                className="flex-1 resize-none border border-slate-300 dark:border-slate-600 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm"
+                className="flex-1 resize-none border border-indigo-100 dark:border-slate-600 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-slate-100 shadow-[0_10px_30px_rgba(99,102,241,0.08)]"
               />
               <button
                 onClick={handleSend}
                 disabled={sending || !input.trim()}
-                className="bg-brand-500 hover:bg-brand-600 disabled:opacity-50 text-white p-3 rounded-2xl shrink-0 shadow-lg shadow-brand-500/20 transition-all duration-200 hover:-translate-y-0.5"
+                className="bg-gradient-to-r from-brand-500 to-violet-500 hover:from-brand-600 hover:to-violet-600 disabled:opacity-50 text-white p-3 rounded-2xl shrink-0 shadow-lg shadow-brand-500/25 transition-all duration-200 hover:-translate-y-0.5"
               >
                 <Send size={18} />
               </button>

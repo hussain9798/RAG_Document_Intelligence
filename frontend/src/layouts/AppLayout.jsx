@@ -45,26 +45,26 @@ export default function AppLayout({ children }) {
   }, [theme]);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
+    <div className="min-h-screen flex flex-col md:flex-row bg-[radial-gradient(circle_at_top_left,_rgba(79,109,245,0.18),transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.12),transparent_28%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.16),transparent_20%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.18),transparent_30%)]">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex-col shrink-0 transition-colors">
-        <div className="h-16 flex items-center gap-2 px-5 border-b border-slate-200 dark:border-slate-700">
-          <div className="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center">
+      <aside className="hidden md:flex w-64 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-r border-slate-200/80 dark:border-slate-700/80 flex-col shrink-0 transition-colors shadow-[0_0_0_1px_rgba(255,255,255,0.2)]">
+        <div className="h-16 flex items-center gap-2 px-5 border-b border-slate-200/80 dark:border-slate-700/80">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-violet-500 flex items-center justify-center shadow-lg shadow-brand-500/25">
             <Sparkles size={18} className="text-white" />
           </div>
           <span className="font-semibold text-lg">DocIntel</span>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-1.5">
           {NAV_ITEMS.map(({ to, label, icon: Icon }) => {
             const active = location.pathname.startsWith(to);
             return (
               <Link
                 key={to}
                 to={to}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors transform hover:-translate-y-0.5 hover:scale-[1.01] ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-[1.01] ${
                   active
-                    ? "bg-brand-50 text-brand-700"
+                    ? "bg-gradient-to-r from-brand-50 to-indigo-50 text-brand-700 shadow-sm ring-1 ring-brand-100"
                     : "text-slate-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700/50"
                 }`}
               >
@@ -75,15 +75,15 @@ export default function AppLayout({ children }) {
           })}
         </nav>
 
-        <div className="p-3 border-t border-slate-200 dark:border-slate-700">
-          <div className="px-3 py-2 mb-1">
+        <div className="p-3 border-t border-slate-200/80 dark:border-slate-700/80">
+          <div className="px-3 py-2 mb-2 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700">
             <p className="text-sm font-medium truncate">{user?.name}</p>
             <p className="text-xs text-slate-500 dark:text-slate-300 truncate">{user?.email}</p>
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-100 hover:opacity-95 transition-all"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 text-slate-700 dark:text-slate-100 hover:opacity-95 transition-all shadow-sm"
               aria-label="Toggle theme"
             >
               {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
@@ -91,7 +91,7 @@ export default function AppLayout({ children }) {
             </button>
             <button
               onClick={logout}
-              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-200 bg-white/0 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-200 bg-white/0 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all"
             >
               <LogOut size={16} />
               Log out

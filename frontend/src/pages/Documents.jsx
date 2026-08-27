@@ -92,9 +92,10 @@ export default function Documents() {
   return (
     <AppLayout>
       <div className="app-page">
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold">Documents</h1>
-          <p className="text-sm text-slate-500 mt-1">Upload PDFs and manage your document library.</p>
+        <div className="mb-7 rounded-3xl bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 p-5 text-white shadow-xl shadow-blue-500/20 sm:p-7">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-200">Knowledge library</p>
+          <h1 className="text-2xl font-bold sm:text-3xl">Your documents, organised.</h1>
+          <p className="mt-1 text-sm text-blue-100">Upload, process and search your source of truth.</p>
         </div>
 
         <div
@@ -109,8 +110,8 @@ export default function Documents() {
             handleFiles(e.dataTransfer.files);
           }}
           onClick={() => fileInputRef.current?.click()}
-          className={`mb-6 border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${
-            dragging ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30" : "border-slate-300 bg-white/75 dark:bg-slate-800/75 hover:border-indigo-400"
+          className={`mb-6 border-2 border-dashed rounded-3xl p-8 sm:p-10 flex flex-col items-center justify-center text-center cursor-pointer transition-all shadow-lg ${
+            dragging ? "border-fuchsia-500 bg-fuchsia-50 dark:bg-fuchsia-950/30" : "border-cyan-300 bg-gradient-to-br from-cyan-50 via-white to-indigo-50 dark:from-slate-800 dark:via-slate-800 dark:to-indigo-950/30 hover:border-fuchsia-400 hover:shadow-cyan-500/10"
           }`}
         >
           <input
@@ -127,7 +128,7 @@ export default function Documents() {
             </>
           ) : (
             <>
-              <Upload size={28} className="text-slate-400 mb-3" />
+              <span className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-indigo-600 text-white shadow-lg shadow-indigo-500/25"><Upload size={28} /></span>
               <p className="text-sm font-medium">Drag & drop a PDF, or click to browse</p>
               <p className="text-xs text-slate-500 mt-1">Processing continues in the background after upload.</p>
             </>
@@ -146,7 +147,7 @@ export default function Documents() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search documents..."
-            className="premium-input w-full rounded-xl pl-9 pr-3 py-2 text-sm"
+            className="premium-input w-full rounded-xl pl-9 pr-3 py-2.5 text-sm"
           />
         </div>
 
@@ -163,7 +164,7 @@ export default function Documents() {
           ) : (
             <div className="overflow-x-auto"><table className="w-full min-w-[640px] text-sm">
               <thead>
-                <tr className="text-left text-slate-500 border-b border-slate-200">
+                <tr className="bg-gradient-to-r from-cyan-50 to-indigo-50 text-left text-slate-600 border-b border-indigo-100">
                   <th className="px-3 sm:px-5 py-3 font-medium">Name</th>
                   <th className="px-3 sm:px-5 py-3 font-medium">Pages</th>
                   <th className="px-3 sm:px-5 py-3 font-medium">Size</th>
@@ -174,7 +175,7 @@ export default function Documents() {
               </thead>
               <tbody>
                 {filtered.map((doc) => (
-                  <tr key={doc.id} className="border-b border-slate-100 last:border-0">
+                  <tr key={doc.id} className="border-b border-slate-100 transition-colors last:border-0 hover:bg-cyan-50/60">
                     <td className="px-3 sm:px-5 py-3">
                       <div className="flex items-center gap-2">
                         <FileText size={16} className="text-slate-400 shrink-0" />

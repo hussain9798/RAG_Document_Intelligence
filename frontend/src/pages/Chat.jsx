@@ -153,7 +153,7 @@ export default function Chat() {
 
   const sidebarContent = (
     <>
-      <div className="p-3 border-b border-slate-200 bg-white dark:bg-slate-800">
+      <div className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 p-3">
         <button
           onClick={startNewConversation}
           className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-500 text-white text-sm font-medium py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all duration-200 hover:-translate-y-0.5"
@@ -169,7 +169,7 @@ export default function Chat() {
             onClick={() => openConversation(c.id)}
             className={`w-full text-left px-3 py-2.5 rounded-xl text-sm flex items-center gap-2 transition-all duration-200 ${
               activeConversationId === c.id
-                ? "bg-brand-50 text-brand-700 shadow-sm ring-1 ring-brand-100"
+                ? "bg-gradient-to-r from-cyan-100 to-indigo-100 text-indigo-700 shadow-sm ring-1 ring-cyan-200"
                 : "hover:bg-slate-100 text-slate-700 dark:hover:bg-slate-700/50 dark:text-slate-200"
             }`}
           >
@@ -203,7 +203,7 @@ export default function Chat() {
 
         {/* Main chat area */}
         <div className="flex-1 flex flex-col min-h-0 bg-[radial-gradient(circle_at_top_left,_rgba(79,109,245,0.12),transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.12),transparent_28%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.14),transparent_18%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.16),transparent_28%)]">
-          <div className="h-16 border-b border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between px-3 md:px-6 shrink-0 bg-white/70 dark:bg-slate-800/75 backdrop-blur-xl shadow-sm">
+          <div className="h-16 border-b border-indigo-100 dark:border-slate-700/80 flex items-center justify-between px-3 md:px-6 shrink-0 bg-gradient-to-r from-white/90 via-cyan-50/80 to-indigo-50/90 dark:from-slate-800/90 dark:via-indigo-950/60 dark:to-slate-800/90 backdrop-blur-xl shadow-sm">
             <div className="flex items-center gap-2 md:hidden">
               <button
                 onClick={() => setMobileSidebarOpen(true)}
@@ -261,8 +261,10 @@ export default function Chat() {
 
           <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 pb-24 md:pb-6 min-h-0">
             {messages.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-slate-400 text-sm text-center px-4">
-                Ask a question about your uploaded documents.
+              <div className="mx-auto flex max-w-md flex-col items-center justify-center text-center px-4">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-cyan-400 to-fuchsia-500 text-white shadow-xl shadow-fuchsia-500/20"><MessageSquare size={28} /></div>
+                <p className="font-semibold text-slate-700 dark:text-slate-200">Ask your knowledge base anything</p>
+                <p className="mt-1 text-sm text-slate-400">Your answer will be grounded in the documents you upload.</p>
               </div>
             ) : (
               messages.map((m) => <MessageBubble key={m.id} message={m} />)

@@ -6,9 +6,9 @@ import { documentsApi, chatApi } from "../services/api.js";
 
 function StatCard({ icon: Icon, label, value }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-4">
-      <div className="w-11 h-11 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
-        <Icon size={20} className="text-brand-600" />
+    <div className="premium-card p-5 flex items-center gap-4">
+      <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-100 to-indigo-100 flex items-center justify-center shrink-0">
+        <Icon size={20} className="text-indigo-600" />
       </div>
       <div>
         <p className="text-2xl font-semibold">{value}</p>
@@ -38,7 +38,7 @@ export default function Dashboard() {
 
   return (
     <AppLayout>
-      <div className="p-8 max-w-6xl mx-auto">
+      <div className="app-page">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-semibold">Dashboard</h1>
@@ -46,7 +46,7 @@ export default function Dashboard() {
           </div>
           <Link
             to="/documents"
-            className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
+            className="premium-button flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl"
           >
             <Upload size={16} />
             Upload document
@@ -66,7 +66,7 @@ export default function Dashboard() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white border border-slate-200 rounded-2xl p-5">
+              <div className="premium-card p-5">
                 <h2 className="font-medium mb-4">Recent documents</h2>
                 {documents.length === 0 ? (
                   <p className="text-sm text-slate-500">No documents uploaded yet.</p>
@@ -82,7 +82,7 @@ export default function Dashboard() {
                 )}
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-2xl p-5">
+              <div className="premium-card p-5">
                 <h2 className="font-medium mb-4">Recent conversations</h2>
                 {conversations.length === 0 ? (
                   <p className="text-sm text-slate-500">No conversations yet.</p>

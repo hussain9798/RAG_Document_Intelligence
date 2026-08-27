@@ -25,7 +25,7 @@ export default function DocumentDetail() {
 
   return (
     <AppLayout>
-      <div className="p-8 max-w-3xl mx-auto">
+      <div className="app-page max-w-3xl">
         <Link to="/documents" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6">
           <ArrowLeft size={16} /> Back to documents
         </Link>
@@ -33,10 +33,10 @@ export default function DocumentDetail() {
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         {doc && (
-          <div className="bg-white border border-slate-200 rounded-2xl p-6">
+          <div className="premium-card p-5 sm:p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-11 h-11 rounded-xl bg-brand-50 flex items-center justify-center">
-                <FileText size={20} className="text-brand-600" />
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-100 to-indigo-100 flex items-center justify-center">
+                <FileText size={20} className="text-indigo-600" />
               </div>
               <div>
                 <h1 className="font-semibold">{doc.filename}</h1>
@@ -74,7 +74,7 @@ export default function DocumentDetail() {
             <div className="mt-6">
               <Link
                 to="/chat"
-                className="inline-block bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
+                className="premium-button inline-block text-sm font-medium px-4 py-2.5 rounded-xl"
               >
                 Ask a question about this document
               </Link>

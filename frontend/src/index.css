@@ -10,6 +10,46 @@ body {
   @apply bg-slate-50 text-slate-900 transition-colors duration-300 antialiased;
 }
 
+@layer components {
+  .app-page {
+    @apply relative mx-auto w-full max-w-6xl p-4 sm:p-6 lg:p-8;
+  }
+  .premium-card {
+    @apply rounded-2xl border border-white/70 bg-white/80 shadow-xl shadow-indigo-950/5 backdrop-blur-xl transition-all duration-300 dark:border-slate-700/70 dark:bg-slate-800/75;
+  }
+  .premium-card:hover {
+    @apply border-indigo-200 shadow-indigo-500/10 dark:border-indigo-500/40;
+  }
+  .premium-input {
+    @apply border border-slate-200 bg-white/80 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800/80 dark:text-white;
+  }
+  .premium-button {
+    @apply bg-gradient-to-r from-cyan-500 via-indigo-500 to-fuchsia-500 text-white shadow-lg shadow-indigo-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-indigo-500/35 disabled:opacity-60;
+  }
+}
+
+.app-bg-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(55px);
+  animation: float-orb 14s ease-in-out infinite alternate;
+}
+.app-bg-blob-one {
+  width: 20rem;
+  height: 20rem;
+  top: -8rem;
+  right: 8%;
+  background: rgba(34, 211, 238, .16);
+}
+.app-bg-blob-two {
+  width: 18rem;
+  height: 18rem;
+  bottom: 4%;
+  left: 4%;
+  background: rgba(217, 70, 239, .12);
+  animation-delay: -6s;
+}
+
 /* dark mode defaults */
 .dark body {
   @apply bg-slate-900 text-slate-100;

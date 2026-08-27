@@ -289,12 +289,12 @@ export default function Chat() {
                 onKeyDown={handleKeyDown}
                 rows={1}
                 placeholder="Ask a question about your documents..."
-                className="flex-1 resize-none border border-indigo-100 dark:border-slate-600 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-slate-100 shadow-[0_10px_30px_rgba(99,102,241,0.08)]"
+                className="premium-input flex-1 resize-none rounded-2xl px-4 py-3 text-sm"
               />
               <button
                 onClick={handleSend}
                 disabled={sending || !input.trim()}
-                className="bg-gradient-to-r from-brand-500 to-violet-500 hover:from-brand-600 hover:to-violet-600 disabled:opacity-50 text-white p-3 rounded-2xl shrink-0 shadow-lg shadow-brand-500/25 transition-all duration-200 hover:-translate-y-0.5"
+                className="premium-button p-3 rounded-2xl shrink-0"
               >
                 <Send size={18} />
               </button>

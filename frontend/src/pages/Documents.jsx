@@ -91,7 +91,7 @@ export default function Documents() {
 
   return (
     <AppLayout>
-      <div className="p-8 max-w-6xl mx-auto">
+      <div className="app-page">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold">Documents</h1>
           <p className="text-sm text-slate-500 mt-1">Upload PDFs and manage your document library.</p>
@@ -110,7 +110,7 @@ export default function Documents() {
           }}
           onClick={() => fileInputRef.current?.click()}
           className={`mb-6 border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${
-            dragging ? "border-brand-500 bg-brand-50" : "border-slate-300 bg-white hover:border-brand-400"
+            dragging ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30" : "border-slate-300 bg-white/75 dark:bg-slate-800/75 hover:border-indigo-400"
           }`}
         >
           <input
@@ -146,11 +146,11 @@ export default function Documents() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search documents..."
-            className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="premium-input w-full rounded-xl pl-9 pr-3 py-2 text-sm"
           />
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-2xl">
+        <div className="premium-card overflow-hidden">
           {loading ? (
             <p className="p-6 text-sm text-slate-500">Loading documents...</p>
           ) : error ? (

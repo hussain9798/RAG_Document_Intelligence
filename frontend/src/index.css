@@ -7,7 +7,7 @@ html, body, #root {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 transition-colors duration-300;
+  @apply bg-slate-50 text-slate-900 transition-colors duration-300 antialiased;
 }
 
 /* dark mode defaults */
@@ -21,6 +21,51 @@ body {
 }
 .slide-up {
   animation: slide-up 300ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.home-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: .5;
+  animation: float-orb 12s ease-in-out infinite alternate;
+}
+.home-orb-blue {
+  width: 34rem;
+  height: 34rem;
+  top: -12rem;
+  left: -10rem;
+  background: #3157ff;
+}
+.home-orb-pink {
+  width: 28rem;
+  height: 28rem;
+  top: 18rem;
+  right: -10rem;
+  background: #d946ef;
+  animation-delay: -4s;
+}
+.home-orb-cyan {
+  width: 20rem;
+  height: 20rem;
+  bottom: 12rem;
+  left: 35%;
+  background: #06b6d4;
+  opacity: .2;
+  animation-delay: -8s;
+}
+
+@keyframes float-orb {
+  from { transform: translate3d(-2%, -3%, 0) scale(1); }
+  to { transform: translate3d(3%, 4%, 0) scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* mobile bottom nav styling */
